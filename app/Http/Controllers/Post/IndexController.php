@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\PostFilter;
 use App\Http\Requests\Post\FilterRequest;
 use App\Models\Post;
 
@@ -13,26 +14,12 @@ class IndexController extends BaseController
         $data = $request->validated();
         // dd($data);
         
-        $query = Post::query();
-
-        if (isset($data['category_id'])) {
-            $query->where('category_id', $data['category_id']);
-        }
-
-        if (isset($data['title'])) {
-            $query->where('title', 'like', "%{$data['title']}%");
-        }
-
-        if (isset($data['content'])) {
-            $query->where('content', 'like', "%{$data['content']}%");
-        }
-        
-        //get likes more than F.e.:40
-        
-        $posts = $query->get();
+        $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
+        $posts = Post::filter($filter)->paginate();
         dd($posts);
+        // dd($posts);
 
         // $posts = Post::paginate(10);
-        // return view('post.index', compact('posts'));
+        return view('post.index', compact('posts'));
     }
 }
