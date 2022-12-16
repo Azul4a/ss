@@ -16,7 +16,6 @@ class IndexController extends BaseController
         
         $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
         $posts = Post::filter($filter)->paginate();
-        dd($posts);
         // dd($posts);
 
         // $posts = Post::paginate(10);

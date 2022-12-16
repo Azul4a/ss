@@ -39,6 +39,6 @@
         </tbody>
     </table>
     <div>
-        {{ $products->links() }}
+        {{ $products->withQueryString()->links() }}
     </div>
 @endsection
